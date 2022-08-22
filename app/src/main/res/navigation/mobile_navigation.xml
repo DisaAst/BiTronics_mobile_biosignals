@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featureStart.HomeFragment"
+        android:label="@string/stringHome"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_nav_find_devices"
+            app:destination="@id/nav_find_devices" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_eeg"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featureEEG.EegFragment"
+        android:label="@string/eegMenu"
+        tools:layout="@layout/fragment_eeg" />
+
+    <fragment
+        android:id="@+id/nav_emg"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featureEMG.EmgFragment"
+        android:label="@string/emgMenu"
+        tools:layout="@layout/fragment_emg" />
+
+    <fragment
+        android:id="@+id/nav_ecg"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featureECG.EcgFragment"
+        android:label="@string/menuEcg"
+        tools:layout="@layout/fragment_ecg" />
+
+    <fragment
+        android:id="@+id/nav_gsr"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featureGSR.GsrFragment"
+        android:label="@string/menuGsr"
+        tools:layout="@layout/fragment_gsr" />
+
+    <fragment
+        android:id="@+id/nav_ppg"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featurePPG.PpgFragment"
+        android:label="@string/menuPulse"
+        tools:layout="@layout/fragment_ppg" />
+
+
+    <fragment
+        android:id="@+id/nav_find_devices"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featureFindDevices.FindDevicesFragment"
+        android:label="@string/connecting"
+        tools:layout="@layout/fragment_find_devices" >
+        <action
+            android:id="@+id/action_nav_find_devices_to_nav_control_device"
+            app:destination="@id/nav_control_device" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_control_device"
+        android:name="com.bitronics.bitronicsmobilebiosignals.presentation.featureControl.ControlFragment"
+        android:label="@string/device_control"
+        tools:layout="@layout/fragment_control" >
+        <action
+            android:id="@+id/action_nav_control_device_to_nav_find_devices"
+            app:destination="@id/nav_find_devices" />
+        <action
+            android:id="@+id/action_nav_control_device_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+
+</navigation>

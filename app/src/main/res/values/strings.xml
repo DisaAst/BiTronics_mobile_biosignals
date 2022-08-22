@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">BiTronics mobile biosignals</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">BiTronics mobile biosignals</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="notifyTitle">Prompt</string>
+    <string name="gpsNotifyMsg">Current mobile phone scanning Bluetooth needs to open the positioning function</string>
+    <string name="setting">Go to settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="aboutApplication">BiTronics mobile biosignals - приложение, предназначенное для визуализации биоэлектрических сигналов на платформе Android</string>
+    <string name="stringHome">Домашняя страница</string>
+
+    <string name="eegMenu">Активность мозга</string>
+    <string name="emgMenu">Мышечная активность</string>
+    <string name="onBluetooth">Начать работу</string>
+    <string name="name_device">Name device</string>
+    <string name="address_device">Address device</string>
+    <string name="connecting">Подключение</string>
+    <string name="startSearch">Начать поиск</string>
+    <string name="textPairedDevices">Список сопряженных устройств</string>
+    <string name="StartSearch">Начать поиск</string>
+    <string name="unnamed_device">Unnamed</string>
+    <string name="device_control">Управление устройством</string>
+    <string name="find_devices">Найденные устройства</string>
+    <string name="find_device_description">Среди доступных устройств выберите BiTronics LU</string>
+    <string name="disconnect">Отключиться</string>
+    <string name="connected">Подключено</string>
+    <string name="device">Устройство</string>
+    <string name="our_contacts">Наши контакты:</string>
+    <string name="string_email">support@bitronicslab.com</string>
+    <string name="fondHelpInnovation">Разработано при поддержке</string>
+    <string name="fondHelpInnovation2">Фонда содействия инновациям</string>
+    <string name="nav_ecg">Актичность сердца</string>
+    <string name="nav_pulse">Пульс</string>
+    <string name="nav_gsr">Сопротивление кожи</string>
+    <string name="menuPulse">Пульс</string>
+    <string name="menuGsr">Сопротивление кожи</string>
+    <string name="menuEcg">Активность сердца</string>
+
+</resources>
