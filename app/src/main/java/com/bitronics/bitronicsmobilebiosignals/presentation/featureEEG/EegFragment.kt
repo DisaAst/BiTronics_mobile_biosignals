@@ -66,7 +66,7 @@ class EegFragment : Fragment() {
         graph_Spectr.addSeries(seriesEEGSpectr)
         graph_Spectr.title = "Спектр сигнала"
         graph_Spectr.titleTextSize = 25f
-        graph_Spectr.viewport.setMaxY(8000.0)
+        graph_Spectr.viewport.setMaxY(80000.0)
         graph_Spectr.viewport.setMinY(0.0)
         graph_Spectr.viewport.setMaxX(28.0)
         graph_Spectr.viewport.isYAxisBoundsManual = true
