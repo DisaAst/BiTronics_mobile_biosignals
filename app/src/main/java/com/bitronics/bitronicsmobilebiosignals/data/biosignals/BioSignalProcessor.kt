@@ -91,7 +91,7 @@ class BioSignalProcessor {
         return EcgData(res, rr)
     }
 
-    fun fftTransform(){
+    fun fftTransform(arr: DoubleArray){
 
     }
 
