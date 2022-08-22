@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.featureEEG.EegFragment">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/EEG_graph"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp" />
-</RelativeLayout>
+        android:layout_height="wrap_content">
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/EEG_graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp" />
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/spectrEEGGraph"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/EEG_graph"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp" />
+
+    </RelativeLayout>
+</ScrollView>
