@@ -52,7 +52,8 @@ class GsrFragment : Fragment() {
         graph_GSR.viewport.setMaxX(10.0)
         graph_GSR.viewport.setYAxisBoundsManual(true)
         graph_GSR.viewport.setXAxisBoundsManual(true)
-
+        graph_GSR.viewport.isScrollable = true; // enables horizontal scrolling
+        graph_GSR.viewport.isScalable = true; // enables horizontal zooming and scrolling
         return root
     }
 

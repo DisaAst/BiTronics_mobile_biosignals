@@ -50,6 +50,8 @@ class EmgFragment : Fragment() {
         graph_EMG.viewport.setMaxX(10.0)
         graph_EMG.viewport.setYAxisBoundsManual(true)
         graph_EMG.viewport.setXAxisBoundsManual(true)
+        graph_EMG.viewport.isScrollable = true; // enables horizontal scrolling
+        graph_EMG.viewport.isScalable = true; // enables horizontal zooming and scrolling
 
         val graphEMGAmplitude: GraphView = binding.amplitudeEmgGraph
         seriesAmplitudeEMG = LineGraphSeries<DataPoint>()

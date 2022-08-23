@@ -49,6 +49,8 @@ class EcgFragment : Fragment() {
         graphECG.viewport.setMaxX(10.0)
         graphECG.viewport.isYAxisBoundsManual = true
         graphECG.viewport.isXAxisBoundsManual = true
+        graphECG.viewport.isScrollable = true; // enables horizontal scrolling
+        graphECG.viewport.isScalable = true; // enables horizontal zooming and scrolling
 
         val graphPulse: GraphView = binding.PulseGraph
         seriesPulse = LineGraphSeries<DataPoint>()

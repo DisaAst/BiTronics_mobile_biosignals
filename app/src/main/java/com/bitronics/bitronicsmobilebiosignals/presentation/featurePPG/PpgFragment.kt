@@ -50,6 +50,9 @@ class PpgFragment : Fragment() {
         graph_PPG.viewport.setMaxX(10.0)
         graph_PPG.viewport.isYAxisBoundsManual = true
         graph_PPG.viewport.isXAxisBoundsManual = true
+        graph_PPG.viewport.isScrollable = true; // enables horizontal scrolling
+        graph_PPG.viewport.isScalable = true; // enables horizontal zooming and scrolling
+
 
         val graphPulse: GraphView = binding.PulseGraph
         seriesPulse = LineGraphSeries<DataPoint>()
