@@ -12,17 +12,17 @@ import kotlin.math.sqrt
 
 class BioSignalProcessor {
 
-    fun getAmplEmg(array: DoubleArray): Double {
+    suspend fun getAmpl(array: DoubleArray): Double = withContext(Dispatchers.IO) {
         var max = 0.0
         var min = 1024.0
         for (i in array.indices) {
             if (array[i] < min) min = array[i]
             if (array[i] > max) max = array[i]
         }
-        return max - min
+        return@withContext max - min
     }
 
-    suspend fun getPulseWithPPG(arrData: DoubleArray): Int = withContext(Dispatchers.IO) {
+    suspend fun getPulseWithPPG(arrData: DoubleArray): Double = withContext(Dispatchers.IO) {
         val data = filter(arrData, 100)
         val th = data.max() * 0.7
         var pulse = 0
@@ -45,7 +45,7 @@ class BioSignalProcessor {
                 count += 1
             }
         }
-        return@withContext getPulse(newTimeArr, pulse).toInt()
+        return@withContext getPulse(newTimeArr, pulse)
     }
 
     suspend fun getPulseWithECG(arrData: DoubleArray): Int = withContext(Dispatchers.IO) {

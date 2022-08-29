@@ -40,5 +40,26 @@
     <string name="menuPulse">Пульс</string>
     <string name="menuGsr">Сопротивление кожи</string>
     <string name="menuEcg">Активность сердца</string>
+    <string name="text_kol_vo_sokr">Количество сокращений мышц</string>
+    <string name="string_about_trigger">Установите триггер (Условие, при наступлении которого происходит какое-либо действие)</string>
+    <string name="value_sokr">Значение: 0</string>
+    <string name="value_emg_sokr">Кол-во сокращений:</string>
+    <string name="count_emg">Кол-во сокр. 1</string>
+    <string name="set_music">Выбор мелодии</string>
+    <string name="music_rain">Звук дождя</string>
+    <string name="queen_bohemian_rhapsody">Queen - Bohemian Rhapsody</string>
+    <string name="Lunnaya_sonata">Людвиг ван Бетховен - Лунная Соната</string>
+    <string name="reset_kolvoEmg">Обнулить кол-во сокращений</string>
+    <string name="pulse">Пульс:</string>
+    <string name="rr">RR-интервал:</string>
+    <string name="power">Мощность</string>
+    <string name="v">V</string>
+    <string name="Signal">Сырой сигнал</string>
+    <string name="string_time">Время, c</string>
+    <string name="u">U, В</string>
+    <string name="Spectr">Спектр сигнала</string>
+    <string name="string_lvl">Уровень</string>
+    <string name="W">Частота, Гц</string>
+    <string name="ebc">EBC (расчетный цикл дыхания):</string>
 
 </resources>

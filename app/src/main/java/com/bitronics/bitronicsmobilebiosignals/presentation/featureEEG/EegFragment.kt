@@ -43,7 +43,6 @@ class EegFragment : Fragment() {
         val graph_EEG: GraphView = binding.EEGGraph
         seriesEEG = LineGraphSeries<DataPoint>()
         graph_EEG.addSeries(seriesEEG)
-        graph_EEG.title = "График электрической активности мозга"
         graph_EEG.titleTextSize = 25f
         graph_EEG.viewport.setMaxY(1024.0)
         graph_EEG.viewport.setMinY(0.0)
@@ -64,7 +63,6 @@ class EegFragment : Fragment() {
                 DataPoint(18.0, 0.0), DataPoint(19.0, 0.0), DataPoint(20.0, 0.0),
             ))
         graph_Spectr.addSeries(seriesEEGSpectr)
-        graph_Spectr.title = "Спектр сигнала"
         graph_Spectr.titleTextSize = 25f
         graph_Spectr.viewport.setMaxY(80000.0)
         graph_Spectr.viewport.setMinY(0.0)

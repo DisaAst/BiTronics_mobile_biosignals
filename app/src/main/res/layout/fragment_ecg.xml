@@ -7,18 +7,82 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/ECGGraph"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp" />
+
+        <TextView
+            android:id="@+id/textPulse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/pulse"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textRR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textPulse"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/rr"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textEBC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textRR"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/ebc"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textSignal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textEBC"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/Signal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textU"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textEBC"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/u"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
 
         <com.jjoe64.graphview.GraphView
-            android:id="@+id/PulseGraph"
+            android:id="@+id/ECGGraph"
             android:layout_width="match_parent"
-            android:layout_below="@+id/ECGGraph"
             android:layout_height="200dp"
-            android:layout_marginTop="20dp" />
+            android:layout_below="@+id/textSignal" />
+
+        <TextView
+            android:id="@+id/textTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ECGGraph"
+            android:text="@string/string_time"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 </ScrollView>

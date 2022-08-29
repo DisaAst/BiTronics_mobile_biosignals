@@ -1,5 +1,7 @@
 package com.bitronics.bitronicsmobilebiosignals.presentation.featurePPG
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.RoundingMode
 import java.util.*
 
 @AndroidEntryPoint
@@ -40,46 +43,36 @@ class PpgFragment : Fragment() {
         _binding = FragmentPpgBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val graph_PPG: GraphView = binding.PPGraph
+        val graph_PPG: GraphView = binding.PPGGraph
         seriesPPG = LineGraphSeries<DataPoint>()
         graph_PPG.addSeries(seriesPPG)
-        graph_PPG.title = "График фотоплетизмограммы"
+        seriesPPG.color = Color.BLUE
         graph_PPG.titleTextSize = 25f
         graph_PPG.viewport.setMaxY(1024.0)
         graph_PPG.viewport.setMinY(0.0)
         graph_PPG.viewport.setMaxX(10.0)
         graph_PPG.viewport.isYAxisBoundsManual = true
         graph_PPG.viewport.isXAxisBoundsManual = true
-        graph_PPG.viewport.isScrollable = true; // enables horizontal scrolling
-        graph_PPG.viewport.isScalable = true; // enables horizontal zooming and scrolling
-
-
-        val graphPulse: GraphView = binding.PulseGraph
-        seriesPulse = LineGraphSeries<DataPoint>()
-        graphPulse.addSeries(seriesPulse)
-        graphPulse.title = "График пульса"
-        graphPulse.titleTextSize = 25f
-        graphPulse.viewport.setMaxY(200.0)
-        graphPulse.viewport.setMinY(0.0)
-        graphPulse.viewport.setMaxX(10.0)
-        graphPulse.viewport.isYAxisBoundsManual = true
-        graphPulse.viewport.isXAxisBoundsManual = true
+        graph_PPG.viewport.isScrollable = true // enables horizontal scrolling
+        graph_PPG.viewport.isScalable = true // enables horizontal zooming and scrolling
 
         return root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         timer_PPG.schedule(ShowData(), 0, 10)
 
 
-        vm.pulse.observe(viewLifecycleOwner, {
-            seriesPulse.appendData(
-                DataPoint(time, it),
-                true,
-                10000
-            )
-        })
+        vm.pulse.observe(viewLifecycleOwner) {
+            binding.textPulse.text = "Пульс: ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+            binding.textRR.text = "RR-интервал: ${(60/it).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+        }
+
+        vm.ampl.observe(viewLifecycleOwner){
+            binding.textEBC.text = "EBC (расчетный цикл дыхания): $it"
+        }
     }
 
     override fun onDestroyView() {
@@ -88,19 +81,12 @@ class PpgFragment : Fragment() {
         _binding = null
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    inner class ShowData() : TimerTask() {
+    inner class ShowData : TimerTask() {
 
         var count = 0
         var arrForProc = DoubleArray(3000)
-
+        var countFilter = 0
+        var sum = 0.0
         override fun run() {
 
             activity?.runOnUiThread {
@@ -108,26 +94,30 @@ class PpgFragment : Fragment() {
                 if (vm.isConnected() && vm.fetchModuleType() == 2) {
                     if (count == 3000) {
                         vm.fetchPulse(arrForProc)
+                        vm.fetchAmpl(arrForProc)
                         count = 0
                     }
+                    if(countFilter == 20){
+                        sum /= 20
+                        seriesPPG.appendData(DataPoint(time, sum), true, 10000)
+                        sum = 0.0
+                        countFilter = 0
+                    }
                     val array: DoubleArray = vm.fetchData()
-                    seriesPPG.appendData(DataPoint(time, array[0]), true, 10000)
+                    sum += array[0] + array[1] + array[2] + array[3] + array[4]
+                    countFilter += 5
                     arrForProc[count] = array[0]
                     count += 1
                     time += 0.002
-                    seriesPPG.appendData(DataPoint(time, array[1]), true, 10000)
                     arrForProc[count] = array[1]
                     count += 1
                     time += 0.002
-                    seriesPPG.appendData(DataPoint(time, array[2]), true, 10000)
                     arrForProc[count] = array[2]
                     count += 1
                     time += 0.002
-                    seriesPPG.appendData(DataPoint(time, array[3]), true, 10000)
                     arrForProc[count] = array[3]
                     count += 1
                     time += 0.002
-                    seriesPPG.appendData(DataPoint(time, array[4]), true, 10000)
                     arrForProc[count] = array[4]
                     count += 1
                     time += 0.002
@@ -136,3 +126,4 @@ class PpgFragment : Fragment() {
         }
     }
 }
+

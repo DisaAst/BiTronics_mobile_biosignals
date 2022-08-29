@@ -16,6 +16,7 @@ class EcgViewModel @Inject constructor(
 ) : ViewModel() {
 
     var pulse = MutableLiveData<Double>()
+    var ampl = MutableLiveData<Double>()
 
     fun fetchData() = mainRepository.fetchDataSensor()
 
@@ -26,6 +27,12 @@ class EcgViewModel @Inject constructor(
     fun fetchPulse(array: DoubleArray) {
         viewModelScope.launch {
             pulse.value = bioSignalProcessor.getPulseWithECG(array).toDouble()
+        }
+    }
+
+    fun fetchAmpl(arr: DoubleArray) {
+        viewModelScope.launch {
+            ampl.value = bioSignalProcessor.getAmpl(arr)
         }
     }
 }

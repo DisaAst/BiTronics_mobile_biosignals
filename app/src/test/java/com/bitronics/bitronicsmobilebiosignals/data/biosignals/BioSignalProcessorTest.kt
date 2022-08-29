@@ -9,7 +9,7 @@ class BioSignalProcessorTest {
     @Test
     fun testAmplEmg() {
         val res: Double = 5.0
-        assertEquals(res, bioSignalProcessor.getAmplEmg(doubleArrayOf(5.0, 6.0, 7.0, 8.0, 10.0)), 0.0)
+        assertEquals(res, bioSignalProcessor.getAmpl(doubleArrayOf(5.0, 6.0, 7.0, 8.0, 10.0)), 0.0)
     }
 
  */

@@ -1,5 +1,7 @@
 package com.bitronics.bitronicsmobilebiosignals.presentation.featureECG
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.RoundingMode
 import java.util.*
 
 @AndroidEntryPoint
@@ -23,7 +26,6 @@ class EcgFragment : Fragment() {
     private val binding get() = _binding!!
 
     lateinit var seriesECG: LineGraphSeries<DataPoint>
-    lateinit var seriesPulse: LineGraphSeries<DataPoint>
     var time: Double = 0.0
 
     var timer_ECG = Timer()
@@ -31,6 +33,7 @@ class EcgFragment : Fragment() {
     val vm: EcgViewModel by viewModels()
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +45,7 @@ class EcgFragment : Fragment() {
         val graphECG: GraphView = binding.ECGGraph
         seriesECG = LineGraphSeries<DataPoint>()
         graphECG.addSeries(seriesECG)
-        graphECG.title = "График электрической активности сердца"
+        seriesECG.color = Color.RED
         graphECG.titleTextSize = 25f
         graphECG.viewport.setMaxY(1024.0)
         graphECG.viewport.setMinY(0.0)
@@ -51,31 +54,22 @@ class EcgFragment : Fragment() {
         graphECG.viewport.isXAxisBoundsManual = true
         graphECG.viewport.isScrollable = true; // enables horizontal scrolling
         graphECG.viewport.isScalable = true; // enables horizontal zooming and scrolling
-
-        val graphPulse: GraphView = binding.PulseGraph
-        seriesPulse = LineGraphSeries<DataPoint>()
-        graphPulse.addSeries(seriesPulse)
-        graphPulse.title = "График пульса"
-        graphPulse.titleTextSize = 25f
-        graphPulse.viewport.setMaxY(200.0)
-        graphPulse.viewport.setMinY(0.0)
-        graphPulse.viewport.setMaxX(10.0)
-        graphPulse.viewport.isYAxisBoundsManual = true
-        graphPulse.viewport.isXAxisBoundsManual = true
         return root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         timer_ECG.schedule(ShowData(), 0, 10)
 
-        vm.pulse.observe(viewLifecycleOwner, {
-            seriesPulse.appendData(
-                DataPoint(time, it),
-                true,
-                10000
-            )
-        })
+        vm.pulse.observe(viewLifecycleOwner) {
+            binding.textPulse.text = "Пульс: ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+            binding.textRR.text = "RR-интервал: ${(60/it).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+        }
+
+        vm.ampl.observe(viewLifecycleOwner){
+            binding.textEBC.text = "EBC (расчетный цикл дыхания): $it"
+        }
     }
 
     override fun onDestroyView() {
@@ -98,6 +92,8 @@ class EcgFragment : Fragment() {
         var count = 0
         var arrForProc = DoubleArray(3000)
 
+        var countFilter = 0
+        var sum = 0.0
         override fun run() {
 
             activity?.runOnUiThread {
@@ -105,26 +101,30 @@ class EcgFragment : Fragment() {
                 if (vm.isConnected() && vm.fetchModuleType() == 1) {
                     if (count == 3000) {
                         vm.fetchPulse(arrForProc)
+                        vm.fetchAmpl(arrForProc)
                         count = 0
                     }
+                    if(countFilter == 20){
+                        sum /= 20
+                        seriesECG.appendData(DataPoint(time, sum), true, 10000)
+                        sum = 0.0
+                        countFilter = 0
+                    }
                     val array: DoubleArray = vm.fetchData()
-                    seriesECG.appendData(DataPoint(time, array[0]), true, 10000)
+                    sum += array[0] + array[1] + array[2] + array[3] + array[4]
+                    countFilter += 5
                     arrForProc[count] = array[0]
                     count += 1
                     time += 0.002
-                    seriesECG.appendData(DataPoint(time, array[1]), true, 10000)
                     arrForProc[count] = array[1]
                     count += 1
                     time += 0.002
-                    seriesECG.appendData(DataPoint(time, array[2]), true, 10000)
                     arrForProc[count] = array[2]
                     count += 1
                     time += 0.002
-                    seriesECG.appendData(DataPoint(time, array[3]), true, 10000)
                     arrForProc[count] = array[3]
                     count += 1
                     time += 0.002
-                    seriesECG.appendData(DataPoint(time, array[4]), true, 10000)
                     arrForProc[count] = array[4]
                     count += 1
                     time += 0.002

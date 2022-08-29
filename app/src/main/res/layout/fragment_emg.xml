@@ -8,20 +8,157 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/graphs">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/EMG_graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp" />
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/amplitudeEmgGraph"
-        android:layout_width="match_parent"
-        android:layout_below="@+id/EMG_graph"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/u"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/SignalEMG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/Signal"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/EMG_graph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/SignalEMG" />
+
+        <TextView
+            android:id="@+id/TimeEMG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/EMG_graph"
+            android:layout_centerHorizontal="true"
+            android:text="@string/string_time"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TimeEMG"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/u"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/textPower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TimeEMG"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:text="@string/power"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/amplitudeEmgGraph"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/textPower"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:id="@+id/txtTrigger1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/amplitudeEmgGraph"
+            android:text="@string/string_about_trigger"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/txtTrigger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtTrigger1"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/value_sokr"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+
+        <SeekBar
+            android:id="@+id/SeekTrigger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtTrigger"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="20dp"
+            android:max="1000"
+            android:progress="1" />
+
+        <TextView
+            android:id="@+id/txtKolvotrig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/SeekTrigger"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/value_emg_sokr"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#99000000"
+            android:textSize="14sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textK1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/txtKolvotrig"
+            android:hint="@string/count_emg"
+            app:boxStrokeColor="@color/purple_700">
+
+            <EditText
+                android:id="@+id/tC1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:focusable="false"
+                android:lines="1"
+                android:shadowColor="@color/purple_200" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/NullKButton"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textK1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/reset_kolvoEmg"
+            android:textColor="#3A89FA" />
     </RelativeLayout>
 </ScrollView>
