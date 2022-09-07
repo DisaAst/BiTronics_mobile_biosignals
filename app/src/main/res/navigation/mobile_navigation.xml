@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_find_devices"
             app:destination="@id/nav_find_devices" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_control_device"
+            app:destination="@id/nav_control_device" />
     </fragment>
 
     <fragment
@@ -62,11 +65,23 @@
         android:label="@string/device_control"
         tools:layout="@layout/fragment_control" >
         <action
-            android:id="@+id/action_nav_control_device_to_nav_find_devices"
-            app:destination="@id/nav_find_devices" />
-        <action
             android:id="@+id/action_nav_control_device_to_nav_home"
             app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_control_device_to_nav_gsr"
+            app:destination="@id/nav_gsr" />
+        <action
+            android:id="@+id/action_nav_control_device_to_nav_emg"
+            app:destination="@id/nav_emg" />
+        <action
+            android:id="@+id/action_nav_control_device_to_nav_eeg"
+            app:destination="@id/nav_eeg" />
+        <action
+            android:id="@+id/action_nav_control_device_to_nav_ecg"
+            app:destination="@id/nav_ecg" />
+        <action
+            android:id="@+id/action_nav_control_device_to_nav_ppg"
+            app:destination="@id/nav_ppg" />
     </fragment>
 
 </navigation>

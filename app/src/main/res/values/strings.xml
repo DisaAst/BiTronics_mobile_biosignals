@@ -43,8 +43,8 @@
     <string name="text_kol_vo_sokr">Количество сокращений мышц</string>
     <string name="string_about_trigger">Установите триггер (Условие, при наступлении которого происходит какое-либо действие)</string>
     <string name="value_sokr">Значение: 0</string>
-    <string name="value_emg_sokr">Кол-во сокращений:</string>
-    <string name="count_emg">Кол-во сокр. 1</string>
+    <string name="value_emg_sokr">Счетчик сокращения мышц</string>
+    <string name="count_emg">Кол-во сокр. </string>
     <string name="set_music">Выбор мелодии</string>
     <string name="music_rain">Звук дождя</string>
     <string name="queen_bohemian_rhapsody">Queen - Bohemian Rhapsody</string>
@@ -52,7 +52,7 @@
     <string name="reset_kolvoEmg">Обнулить кол-во сокращений</string>
     <string name="pulse">Пульс:</string>
     <string name="rr">RR-интервал:</string>
-    <string name="power">Мощность</string>
+    <string name="power">Мощность сигнала</string>
     <string name="v">V</string>
     <string name="Signal">Сырой сигнал</string>
     <string name="string_time">Время, c</string>
@@ -61,5 +61,23 @@
     <string name="string_lvl">Уровень</string>
     <string name="W">Частота, Гц</string>
     <string name="ebc">EBC (расчетный цикл дыхания):</string>
+    <string name="timeOfReaction">Время восстановления:</string>
+    <string name="PowerGSR">Мощность сигнала:</string>
+    <string name="strEmg">Электромиограмма</string>
+    <string name="P">P, отн. ед.</string>
+    <string name="aboutEeg">Попробуйте расслабиться, чтобы заиграла музыка.</string>
+    <string name="aboutPulseParams">Сравните параметры до и после физической нагрузки, и поймите как они изменяются.</string>
+    <string name="AboutGSR">Узнайте свое время восстановления, после предьявления стимула.</string>
+    <string name="SignalGSR">Кожно-гальваническая реакция</string>
+    <string name="SignalFPG">Фотоплетизмограмма</string>
+    <string name="SignalECG">Электрокардиограмма</string>
+    <string name="SignalEEG">Электроэнцефалограмма</string>
+    <string name="controlGouestions">Выберите интересующую вас активность</string>
+    <string name="MuscleActivity">Мышечная активность</string>
+    <string name="BrainActivity">Активность Мозга</string>
+    <string name="SActivity">Активность сердца</string>
+    <string name="GSRActivity">Сопротивление кожи</string>
+    <string name="PulseActivity">Пульс</string>
+    <string name="Kalibrate">Калибровка</string>
 
 </resources>

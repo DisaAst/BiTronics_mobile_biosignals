@@ -1,88 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F7F9FC">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#F7F9FC">
 
-        <TextView
-            android:id="@+id/textPulse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/pulse"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#99000000"
-            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/textRR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textPulse"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/rr"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#99000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/textEBC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textRR"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/ebc"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#99000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/textSignal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textEBC"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:text="@string/Signal"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#99000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/textU"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textEBC"
-            android:layout_marginTop="30dp"
-            android:layout_marginStart="20dp"
-            android:text="@string/u"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#99000000"
-            android:textSize="14sp" />
-
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/PPGGraph"
+        <RelativeLayout
+            android:id="@+id/FirstBlock"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@+id/textSignal"
-            />
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@color/white">
 
-        <TextView
-            android:id="@+id/textTime"
+            <TextView
+                android:id="@+id/textAboutPulse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="10dp"
+                android:text="@string/aboutPulseParams"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textPulse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textAboutPulse"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/pulse"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textRR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textPulse"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/rr"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textEBC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textRR"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/ebc"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/PPGGraph"
-            android:text="@string/string_time"
-            android:layout_centerHorizontal="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="#99000000"
-            android:textSize="14sp" />
+            android:layout_below="@+id/FirstBlock"
+            android:layout_margin="15dp"
+            android:background="@color/white">
 
+            <TextView
+                android:id="@+id/textSignal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/SignalFPG"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textU"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/u"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="14sp" />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/PPGGraph"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/textSignal" />
+
+            <TextView
+                android:id="@+id/textTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/PPGGraph"
+                android:text="@string/string_time"
+                android:layout_centerHorizontal="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="14sp" />
+        </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

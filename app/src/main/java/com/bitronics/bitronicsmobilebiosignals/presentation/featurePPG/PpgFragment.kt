@@ -48,7 +48,7 @@ class PpgFragment : Fragment() {
         graph_PPG.addSeries(seriesPPG)
         seriesPPG.color = Color.BLUE
         graph_PPG.titleTextSize = 25f
-        graph_PPG.viewport.setMaxY(1024.0)
+        graph_PPG.viewport.setMaxY(3.0)
         graph_PPG.viewport.setMinY(0.0)
         graph_PPG.viewport.setMaxX(10.0)
         graph_PPG.viewport.isYAxisBoundsManual = true
@@ -66,12 +66,19 @@ class PpgFragment : Fragment() {
 
 
         vm.pulse.observe(viewLifecycleOwner) {
-            binding.textPulse.text = "Пульс: ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
-            binding.textRR.text = "RR-интервал: ${(60/it).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+            if(it < 50) {
+                binding.textPulse.text = "Пульс: -"
+                binding.textRR.text = "RR-интервал: -"
+            }
+            else {
+                binding.textPulse.text =
+                    "Пульс: ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+                binding.textRR.text = "RR-интервал: ${(60 / it).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+            }
         }
 
         vm.ampl.observe(viewLifecycleOwner){
-            binding.textEBC.text = "EBC (расчетный цикл дыхания): $it"
+            binding.textEBC.text = "EBC (расчетный цикл дыхания): ${it.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()}"
         }
     }
 

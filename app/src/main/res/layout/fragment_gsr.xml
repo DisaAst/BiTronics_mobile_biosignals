@@ -1,13 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F7F9FC">
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/GSRGraph"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp" />
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/FirstBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/AboutGSR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/AboutGSR"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
 
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/AmplitudeGSR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AboutGSR"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/PowerGSR"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/ReactionGSR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AmplitudeGSR"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/timeOfReaction"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/NullKButton"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ReactionGSR"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="@string/Kalibrate"
+                android:textColor="#3A89FA" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_below="@+id/FirstBlock"
+            android:layout_margin="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/u"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/SignalGSR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="@string/SignalGSR"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="14sp" />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/GSRGraph"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/SignalGSR" />
+
+            <TextView
+                android:id="@+id/TimeGSR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/GSRGraph"
+                android:layout_centerHorizontal="true"
+                android:text="@string/string_time"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+</ScrollView>

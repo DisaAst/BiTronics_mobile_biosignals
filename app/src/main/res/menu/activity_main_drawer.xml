@@ -6,24 +6,31 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:title="@string/stringHome" />
+            android:title="@string/stringHome"
+            android:icon="@drawable/ic_baseline_home_24"
+            />
         <item
             android:id="@+id/nav_eeg"
+            android:icon="@drawable/outline_psychology_24"
             android:title="@string/eegMenu" />
         <item
             android:id="@+id/nav_emg"
+            android:icon="@drawable/ic_muscle"
             android:title="@string/emgMenu" />
 
         <item
             android:id="@+id/nav_ecg"
+            android:icon="@drawable/outline_favorite_24"
             android:title="@string/nav_ecg" />
 
         <item
             android:id="@+id/nav_ppg"
+            android:icon="@drawable/clipboard_pulse_outline"
             android:title="@string/nav_pulse" />
 
         <item
             android:id="@+id/nav_gsr"
+            android:icon="@drawable/gesture_two_tap"
             android:title="@string/nav_gsr" />
     </group>
 </menu>

@@ -50,7 +50,6 @@ class FindDevicesFragment : Fragment() {
 
         _binding = FragmentFindDevicesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        vm.disconnect()
 
         return root
     }
@@ -83,7 +82,6 @@ class FindDevicesFragment : Fragment() {
         vm.status.observe(viewLifecycleOwner, {
             if (it == true) view.findNavController()
                 .navigate(R.id.action_nav_find_devices_to_nav_control_device)
-            else{}
         })
         binding.btnEnableSearch.setOnClickListener {
             vm.startScan()

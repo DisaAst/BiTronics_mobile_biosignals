@@ -52,7 +52,7 @@ class MainRepository @Inject constructor(val context: Context, val parser: Parse
             }
 
             override fun onScanning(bleDevice: BleDevice) {
-                devices.add(bleDevice)
+                if(bleDevice.name == "BiTronicsLU") devices.add(bleDevice)
             }
 
             override fun onScanFinished(scanResultList: List<BleDevice>) {
@@ -105,6 +105,7 @@ class MainRepository @Inject constructor(val context: Context, val parser: Parse
             }
         })
         while (true) {
+            Log.d("Status", statusConnected.toString())
             if (state == 1) {
                 emit(connected)
                 break

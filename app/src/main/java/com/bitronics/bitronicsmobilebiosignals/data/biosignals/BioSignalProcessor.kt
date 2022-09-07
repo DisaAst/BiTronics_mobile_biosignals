@@ -84,7 +84,9 @@ class BioSignalProcessor {
         val rr = lastPic - firstPic
         val res = 60 / ((rr * 100) / pics)
         Log.d("Pulse", res.toString())
-        return res
+        return if(res.isNaN()){
+            30.0
+        } else res
     }
 
 

@@ -14,6 +14,12 @@ class EegViewModel @Inject constructor(val mainRepository: MainRepository, val b
 
     var spectr = MutableLiveData<DoubleArray>()
 
+    var trigger = MutableLiveData<Double>()
+
+    fun setTrigger(value: Double){
+        trigger.value = value
+    }
+
     fun fetchData() = mainRepository.fetchDataSensor()
 
     fun fetchModuleType() = mainRepository.fetchSensorType()

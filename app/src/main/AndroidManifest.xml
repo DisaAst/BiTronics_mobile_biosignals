@@ -13,11 +13,11 @@
     <application
         android:allowBackup="true"
         android:name = ".core.App"
+        android:roundIcon="@drawable/ic_btr_round"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_btr_round"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BiTronicsMobileBiosignals"
         tools:targetApi="31">

@@ -10,12 +10,14 @@ import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bitronics.bitronicsmobilebiosignals.databinding.FragmentEmgBinding
+import com.google.android.material.slider.Slider
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.ValueDependentColor
 import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import dagger.hilt.android.AndroidEntryPoint
+import java.math.RoundingMode
 import java.util.*
 import kotlin.math.abs
 
@@ -32,7 +34,7 @@ class EmgFragment : Fragment() {
     lateinit var seriesAmplitudeEMG: BarGraphSeries<DataPoint>
 
     var time: Double = 0.0
-    var trigger = 500
+    var trigger = 1.5
 
     var timer_EMG = Timer()
 
@@ -53,7 +55,7 @@ class EmgFragment : Fragment() {
         seriesEMG = LineGraphSeries<DataPoint>()
         graph_EMG.addSeries(seriesEMG)
         graph_EMG.titleTextSize = 25f
-        graph_EMG.viewport.setMaxY(1024.0)
+        graph_EMG.viewport.setMaxY(3.0)
         graph_EMG.viewport.setMinY(0.0)
         graph_EMG.viewport.setMaxX(10.0)
         graph_EMG.viewport.isYAxisBoundsManual = true
@@ -70,7 +72,7 @@ class EmgFragment : Fragment() {
 
         graphEMGAmplitude.addSeries(seriesAmplitudeEMG)
         graphEMGAmplitude.titleTextSize = 25f
-        graphEMGAmplitude.viewport.setMaxY(1024.0)
+        graphEMGAmplitude.viewport.setMaxY(3.0)
         graphEMGAmplitude.viewport.setMinY(0.0)
         graphEMGAmplitude.viewport.setMaxX(4.0)
         graphEMGAmplitude.viewport.isYAxisBoundsManual = true
@@ -83,7 +85,7 @@ class EmgFragment : Fragment() {
                 100
             )
         }
-        binding.SeekTrigger.progress = trigger
+        binding.SeekTrigger.value = trigger.toFloat()
         vm.setTrigger(trigger)
         return root
     }
@@ -93,12 +95,11 @@ class EmgFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         timer_EMG.schedule(ShowData(), 0, 10)
 
-        binding.SeekTrigger.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                vm.setTrigger(progress)
+        binding.SeekTrigger.addOnChangeListener(object : Slider.OnChangeListener{
+            override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
+                vm.setTrigger(value.toDouble())
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+
         })
 
         vm.ampl.observe(viewLifecycleOwner){
@@ -125,8 +126,8 @@ class EmgFragment : Fragment() {
 
         vm.trigger.observe(viewLifecycleOwner){
             trigger = it
-            binding.SeekTrigger.progress = it
-            binding.txtTrigger.text = "Значение: $trigger"
+            binding.SeekTrigger.value = it.toFloat()
+            binding.txtTrigger.text = "Значение: ${trigger.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
         }
 
         binding.NullKButton.setOnClickListener {

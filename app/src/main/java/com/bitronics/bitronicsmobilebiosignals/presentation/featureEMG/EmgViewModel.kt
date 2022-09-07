@@ -18,13 +18,13 @@ class EmgViewModel @Inject constructor(
 
     var ampl = MutableLiveData<Double>()
 
-    var trigger = MutableLiveData<Int>()
+    var trigger = MutableLiveData<Double>()
 
     var sokr = MutableLiveData<Int>()
 
     var kolvo = 0
 
-    fun setTrigger(value:Int){
+    fun setTrigger(value:Double){
         trigger.value = value
     }
 

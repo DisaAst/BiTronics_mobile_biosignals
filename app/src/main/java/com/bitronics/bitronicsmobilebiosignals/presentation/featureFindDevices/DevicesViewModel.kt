@@ -35,6 +35,7 @@ class DevicesViewModel @Inject constructor(val mainRepository: MainRepository) :
     }
 
     fun connect(bleDevice: BleDevice) {
+        status.value = false
         viewModelScope.launch {
             mainRepository.connect(bleDevice).collect {
                 status.value = it

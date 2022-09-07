@@ -52,7 +52,28 @@ class ControlFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnDisconnect.setOnClickListener{
-            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_find_devices)
+            vm.disconnect()
+            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_home)
+        }
+
+        binding.buttonBrain.setOnClickListener {
+            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_eeg)
+        }
+
+        binding.buttonECG.setOnClickListener {
+            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_ecg)
+        }
+
+        binding.buttonPulse.setOnClickListener {
+            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_ppg)
+        }
+
+        binding.buttonKGR.setOnClickListener {
+            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_gsr)
+        }
+
+        binding.buttonMuscle.setOnClickListener {
+            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_emg)
         }
     }
 
