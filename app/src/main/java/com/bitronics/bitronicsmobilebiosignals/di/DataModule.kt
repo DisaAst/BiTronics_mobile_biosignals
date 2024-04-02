@@ -21,7 +21,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DataModule {
 
-
     @Provides
     @Singleton
     fun provideEnableBluetooth(activity: Activity): EnableBluetooth {

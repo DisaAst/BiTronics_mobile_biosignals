@@ -1,6 +1,6 @@
 package com.bitronics.bitronicsmobilebiosignals.presentation.featureFindDevices
 
-import android.util.Log
+import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class DevicesViewModel @Inject constructor(val mainRepository: MainRepository) : ViewModel() {
 
 
-    var devices = MutableLiveData<ArrayList<BleDevice>>()
+    var devices = MutableLiveData<ArrayList<BluetoothDevice>>()
 
     var status = MutableLiveData<Boolean>()
 
@@ -41,10 +41,6 @@ class DevicesViewModel @Inject constructor(val mainRepository: MainRepository) :
                 status.value = it
             }
         }
-    }
-
-    fun disconnect() {
-        mainRepository.disconnect()
     }
 
 }

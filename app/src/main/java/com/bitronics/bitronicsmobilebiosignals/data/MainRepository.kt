@@ -1,5 +1,8 @@
 package com.bitronics.bitronicsmobilebiosignals.data
 
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.content.Context
 import android.util.Log
@@ -20,6 +23,7 @@ import javax.inject.Inject
 
 class MainRepository @Inject constructor(val context: Context, val parser: Parser) {
 
+    val bluetoothAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     var dataSensor = doubleArrayOf(0.0, 0.0, 0.0, 0.0, 0.0)
 
     var sensorType = 0
@@ -38,33 +42,18 @@ class MainRepository @Inject constructor(val context: Context, val parser: Parse
     }
 
 
-    fun startScan(): Flow<ArrayList<BleDevice>> = flow {
-        var state = 0
-        val devices = ArrayList<BleDevice>()
-
-        BleManager.getInstance().scan(object : BleScanCallback() {
-            override fun onScanStarted(success: Boolean) {
-                Log.e("Scan", "Start")
-            }
-
-            override fun onLeScan(bleDevice: BleDevice) {
-                super.onLeScan(bleDevice)
-            }
-
-            override fun onScanning(bleDevice: BleDevice) {
-                if(bleDevice.name == "BiTronicsLU") devices.add(bleDevice)
-            }
-
-            override fun onScanFinished(scanResultList: List<BleDevice>) {
-                Log.e("Scan result", scanResultList.toString())
-                state = 1
-                Log.e("St", state.toString())
-            }
-        })
+    @SuppressLint("MissingPermission")
+    fun startScan(): Flow<ArrayList<BluetoothDevice>> = flow {
+        val devices = ArrayList<BluetoothDevice>()
+        bluetoothAdapter.startDiscovery()
         while (true) {
-            Log.d("W", "Work")
-            if (state == 1) {
-                Log.e("Status", "Data received")
+            val bondedDevices = bluetoothAdapter.bondedDevices
+            bondedDevices?.forEach { device ->
+                if (device.name == "YourDeviceName") {
+                    devices.add(device)
+                }
+            }
+            if (!devices.isEmpty()) {
                 emit(devices)
                 break
             }

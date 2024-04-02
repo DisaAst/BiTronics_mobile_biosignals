@@ -3,6 +3,7 @@ package com.bitronics.bitronicsmobilebiosignals.presentation.featureFindDevices
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.bluetooth.BluetoothDevice
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -63,26 +64,26 @@ class FindDevicesFragment : Fragment() {
         checkPermissions()
 
 
-        vm.devices.observe(viewLifecycleOwner, {
+        vm.devices.observe(viewLifecycleOwner) {
             recyclerView.adapter = CustomRecyclerAdapter(it, object : DeviceActionListener {
-                override fun fetchDevice(device: BleDevice) {
+                override fun fetchDevice(device: BluetoothDevice) {
                     Log.e("Device:", device.toString())
-                    vm.connect(device)
+                    //vm.connect(device)
                 }
             })
-        })
+        }
 
-        vm.scanStatus.observe(viewLifecycleOwner, {
+        vm.scanStatus.observe(viewLifecycleOwner) {
             if (it == true) binding.pbProgress.visibility = View.VISIBLE
             else binding.pbProgress.visibility = View.GONE
 
 
-        })
+        }
 
-        vm.status.observe(viewLifecycleOwner, {
+        vm.status.observe(viewLifecycleOwner) {
             if (it == true) view.findNavController()
                 .navigate(R.id.action_nav_find_devices_to_nav_control_device)
-        })
+        }
         binding.btnEnableSearch.setOnClickListener {
             vm.startScan()
         }
