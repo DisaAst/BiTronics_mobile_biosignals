@@ -7,7 +7,7 @@ import android.content.Intent
 
 interface EnableBluetooth {
 
-    suspend fun onBluetooth() : Int
+    fun onBluetooth() : Int
 
     class Base (val activity: Activity) : EnableBluetooth{
 
@@ -16,7 +16,7 @@ interface EnableBluetooth {
         }
 
         @SuppressLint("MissingPermission")
-        override suspend fun onBluetooth() : Int{
+        override fun onBluetooth() : Int{
             val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             activity.startActivityForResult(intent, REQ_ENABLE_BT)
             return REQ_ENABLE_BT

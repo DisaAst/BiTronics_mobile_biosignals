@@ -14,8 +14,6 @@ class HomeViewModel @Inject constructor(val enableBluetooth: EnableBluetooth) : 
 
 
     fun enableBluetooth() {
-        viewModelScope.launch((Dispatchers.Main)) {
-            enableBluetooth.onBluetooth()
-        }
+        enableBluetooth.onBluetooth()
     }
 }
