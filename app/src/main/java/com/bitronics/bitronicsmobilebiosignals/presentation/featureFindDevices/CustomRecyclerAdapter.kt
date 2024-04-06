@@ -2,10 +2,12 @@ package com.bitronics.bitronicsmobilebiosignals.presentation.featureFindDevices
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bitronics.bitronicsmobilebiosignals.R
 
@@ -16,6 +18,7 @@ interface DeviceActionListener {
 class CustomRecyclerAdapter(private val devices: ArrayList<BluetoothDevice>, private val actionListener: DeviceActionListener) : RecyclerView
 .Adapter<CustomRecyclerAdapter.MyViewHolder>(), View.OnClickListener{
 
+    var context = this
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.findViewById(R.id.textName)
         val mac: TextView = itemView.findViewById(R.id.textAddress)

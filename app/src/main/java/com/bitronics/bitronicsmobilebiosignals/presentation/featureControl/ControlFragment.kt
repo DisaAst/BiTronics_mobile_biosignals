@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +32,7 @@ class ControlFragment : Fragment() {
     private val binding get() = _binding!!
     val vm: ControlViewModel by viewModels()
 
-    @SuppressLint("FragmentLiveDataObserve")
+    @SuppressLint("FragmentLiveDataObserve", "MissingPermission")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,16 +42,23 @@ class ControlFragment : Fragment() {
         _binding = FragmentControlBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.txtDevice.text = deviceC.name.toString()
+        vm.startScan()
+        binding.txtStatus.text = "Значение:"
 
-        if(!vm.isConnected()) {
+        /*if(!vm.isConnected()) {
             view?.findNavController()?.navigate(R.id.action_nav_control_device_to_nav_home)
-        }
+        }*/
 
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        vm.value.observe(viewLifecycleOwner) { it ->
+            binding.txtStatus.text = it
+        }
+
         binding.btnDisconnect.setOnClickListener{
             vm.disconnect()
             view.findNavController().navigate(R.id.action_nav_control_device_to_nav_home)

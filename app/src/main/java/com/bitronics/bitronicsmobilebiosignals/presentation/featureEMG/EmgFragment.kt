@@ -26,17 +26,13 @@ class EmgFragment : Fragment() {
 
     private var _binding: FragmentEmgBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     lateinit var seriesEMG: LineGraphSeries<DataPoint>
     lateinit var seriesAmplitudeEMG: BarGraphSeries<DataPoint>
 
-    var time: Double = 0.0
     var trigger = 1.5
 
-    var timer_EMG = Timer()
 
     val vm: EmgViewModel by viewModels()
 
@@ -55,7 +51,7 @@ class EmgFragment : Fragment() {
         seriesEMG = LineGraphSeries<DataPoint>()
         graph_EMG.addSeries(seriesEMG)
         graph_EMG.titleTextSize = 25f
-        graph_EMG.viewport.setMaxY(3.0)
+        graph_EMG.viewport.setMaxY(5.0)
         graph_EMG.viewport.setMinY(0.0)
         graph_EMG.viewport.setMaxX(10.0)
         graph_EMG.viewport.isYAxisBoundsManual = true
@@ -72,9 +68,9 @@ class EmgFragment : Fragment() {
 
         graphEMGAmplitude.addSeries(seriesAmplitudeEMG)
         graphEMGAmplitude.titleTextSize = 25f
-        graphEMGAmplitude.viewport.setMaxY(3.0)
+        graphEMGAmplitude.viewport.setMaxY(5.0)
         graphEMGAmplitude.viewport.setMinY(0.0)
-        graphEMGAmplitude.viewport.setMaxX(4.0)
+        graphEMGAmplitude.viewport.setMaxX(5.0)
         graphEMGAmplitude.viewport.isYAxisBoundsManual = true
         graphEMGAmplitude.viewport.isXAxisBoundsManual = true
         seriesAmplitudeEMG.spacing = 90
@@ -85,6 +81,7 @@ class EmgFragment : Fragment() {
                 100
             )
         }
+        vm.runReading()
         binding.SeekTrigger.value = trigger.toFloat()
         vm.setTrigger(trigger)
         return root
@@ -93,7 +90,6 @@ class EmgFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        timer_EMG.schedule(ShowData(), 0, 10)
 
         binding.SeekTrigger.addOnChangeListener(object : Slider.OnChangeListener{
             override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
@@ -102,7 +98,11 @@ class EmgFragment : Fragment() {
 
         })
 
-        vm.ampl.observe(viewLifecycleOwner){
+        vm.emgValue.observe(viewLifecycleOwner) {
+            seriesEMG.appendData(DataPoint(vm.time, it), true, 10000)
+        }
+
+        /*vm.ampl.observe(viewLifecycleOwner){
             seriesAmplitudeEMG
                 .resetData(arrayOf(DataPoint(1.0, it)))
             seriesAmplitudeEMG.spacing = 90
@@ -130,15 +130,16 @@ class EmgFragment : Fragment() {
             binding.txtTrigger.text = "Значение: ${trigger.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
         }
 
+
         binding.NullKButton.setOnClickListener {
             vm.minusEmg()
-        }
+        }*/
 
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        timer_EMG.cancel()
+        vm.closeReading()
         _binding = null
 
     }
@@ -149,43 +150,5 @@ class EmgFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-    }
-
-    inner class ShowData() : TimerTask() {
-
-        var count = 0;
-        var arrForProc = DoubleArray(120)
-        override fun run() {
-            activity?.runOnUiThread {
-                if (vm.isConnected() && vm.fetchModuleType() == 3) {
-                    var array = doubleArrayOf()
-                    if (count == 120) {
-                        vm.fetchAmplitudeEMG(arrForProc)
-                        count = 0
-                    }
-                    array = vm.fetchData()
-                    seriesEMG.appendData(DataPoint(time, array[0]), true, 10000)
-                    arrForProc[count] = array[0]
-                    count += 1
-                    time += 0.002
-                    seriesEMG.appendData(DataPoint(time, array[1]), true, 10000)
-                    arrForProc[count] = array[1]
-                    count += 1
-                    time += 0.002
-                    seriesEMG.appendData(DataPoint(time, array[2]), true, 10000)
-                    arrForProc[count] = array[2]
-                    count += 1
-                    time += 0.002
-                    seriesEMG.appendData(DataPoint(time, array[3]), true, 10000)
-                    arrForProc[count] = array[3]
-                    count += 1
-                    time += 0.002
-                    seriesEMG.appendData(DataPoint(time, array[4]), true, 10000)
-                    arrForProc[count] = array[4]
-                    count += 1
-                    time += 0.002
-                }
-            }
-        }
     }
 }

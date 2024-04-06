@@ -15,6 +15,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -60,15 +61,11 @@ class FindDevicesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView: RecyclerView = binding.devicesRecycler
         recyclerView.layoutManager = LinearLayoutManager(activity)
-
         checkPermissions()
-
-
         vm.devices.observe(viewLifecycleOwner) {
             recyclerView.adapter = CustomRecyclerAdapter(it, object : DeviceActionListener {
                 override fun fetchDevice(device: BluetoothDevice) {
-                    Log.e("Device:", device.toString())
-                    //vm.connect(device)
+                    vm.connect(device)
                 }
             })
         }
@@ -76,8 +73,6 @@ class FindDevicesFragment : Fragment() {
         vm.scanStatus.observe(viewLifecycleOwner) {
             if (it == true) binding.pbProgress.visibility = View.VISIBLE
             else binding.pbProgress.visibility = View.GONE
-
-
         }
 
         vm.status.observe(viewLifecycleOwner) {

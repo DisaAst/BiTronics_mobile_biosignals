@@ -18,6 +18,12 @@ class EmgViewModel @Inject constructor(
 
     var ampl = MutableLiveData<Double>()
 
+    var emgValue = MutableLiveData<Double>()
+
+    var timeValue = MutableLiveData<Double>(0.0)
+
+    var time = 0.0
+
     var trigger = MutableLiveData<Double>()
 
     var sokr = MutableLiveData<Int>()
@@ -37,7 +43,23 @@ class EmgViewModel @Inject constructor(
         kolvo = 0
         sokr.value = kolvo
     }
-    fun fetchData() = mainRepository.fetchDataSensor()
+
+    fun runReading(){
+        viewModelScope.launch {
+            mainRepository.runReading().collect {
+                time += 0.03
+                var sens1 = it[0].toUByte().toDouble()
+                timeValue.value = time
+                var koef = 5.0 / 255.0
+                emgValue.value = sens1 * koef
+            }
+        }
+    }
+
+    fun closeReading(){
+        time = 0.0
+        timeValue.value = time
+    }
 
     fun fetchModuleType() = mainRepository.fetchSensorType()
 

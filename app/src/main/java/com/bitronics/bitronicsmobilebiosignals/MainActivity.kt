@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -18,7 +19,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bitronics.bitronicsmobilebiosignals.databinding.ActivityMainBinding
-import com.clj.fastble.data.BleDevice
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     companion object{
         @SuppressLint("StaticFieldLeak")
         lateinit var activity: Activity
-        lateinit var deviceC: BleDevice
+        lateinit var deviceC: BluetoothDevice
         val REQUEST_CODE_OPEN_GPS = 1
         val REQUEST_CODE_PERMISSION_LOCATION = 2
     }
