@@ -13,22 +13,33 @@ import javax.inject.Inject
 class EegViewModel @Inject constructor(val mainRepository: MainRepository, val bioSignalProcessor: BioSignalProcessor) : ViewModel() {
 
     var spectr = MutableLiveData<DoubleArray>()
+    var eegValue = MutableLiveData<Double>()
+    var trigger = MutableLiveData<Double>(10.0)
+    var seriesEEG = DoubleArray(32)
+    var counter = 0
+    var time = 0.0
+    var alpha = MutableLiveData<Double>(0.0)
+    var melody = MutableLiveData<Int>()
 
-    var trigger = MutableLiveData<Double>()
-
+    fun runReading(){
+        viewModelScope.launch {
+            mainRepository.runReading().collect {
+                var value = (it[0].toUByte().toDouble() / 255.0) * 5.0
+                eegValue.value = value
+                if(counter == 32){
+                    var newSpectr = bioSignalProcessor.fftTransform(seriesEEG)
+                    spectr.value = newSpectr
+                    alpha.value = newSpectr[8] + newSpectr[9] + newSpectr[10] + newSpectr[11]
+                    counter = 0
+                }
+                seriesEEG[counter] = value
+                time += 0.03
+                counter ++
+            }
+        }
+    }
     fun setTrigger(value: Double){
         trigger.value = value
     }
 
-    fun fetchData() = mainRepository.fetchDataSensor()
-
-    fun fetchModuleType() = mainRepository.fetchSensorType()
-
-    fun isConnected() = mainRepository.isConnected()
-
-    fun fetchSpectr(arr: DoubleArray){
-        viewModelScope.launch {
-            spectr.value = bioSignalProcessor.fftTransform(arr)
-        }
-    }
 }

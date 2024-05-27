@@ -28,16 +28,10 @@ class EmgFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    lateinit var seriesEMG: LineGraphSeries<DataPoint>
+    lateinit var firstSeriesEMG: LineGraphSeries<DataPoint>
+    lateinit var secondSeriesEMG: LineGraphSeries<DataPoint>
     lateinit var seriesAmplitudeEMG: BarGraphSeries<DataPoint>
-
-    var trigger = 1.5
-
-
     val vm: EmgViewModel by viewModels()
-
-    var bCount1 = false
-    var bCount1_1 = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +42,10 @@ class EmgFragment : Fragment() {
         _binding = FragmentEmgBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val graph_EMG: GraphView = binding.EMGGraph
-        seriesEMG = LineGraphSeries<DataPoint>()
-        graph_EMG.addSeries(seriesEMG)
+        firstSeriesEMG = LineGraphSeries<DataPoint>()
+        secondSeriesEMG = LineGraphSeries<DataPoint>()
+        graph_EMG.addSeries(firstSeriesEMG)
+        graph_EMG.secondScale.addSeries(secondSeriesEMG)
         graph_EMG.titleTextSize = 25f
         graph_EMG.viewport.setMaxY(5.0)
         graph_EMG.viewport.setMinY(0.0)
@@ -58,19 +54,25 @@ class EmgFragment : Fragment() {
         graph_EMG.viewport.isXAxisBoundsManual = true
         graph_EMG.viewport.isScrollable = true; // enables horizontal scrolling
         graph_EMG.viewport.isScalable = true; // enables horizontal zooming and scrolling
-        seriesEMG.color = Color.GREEN
+        firstSeriesEMG.color = Color.GREEN
 
         val graphEMGAmplitude: GraphView = binding.amplitudeEmgGraph
 
         seriesAmplitudeEMG = BarGraphSeries(
-            arrayOf(DataPoint(0.0,0.0), DataPoint(1.0, 0.0), DataPoint(2.0, 0.0), DataPoint(3.0, 0.0), DataPoint(4.0, 0.0))
+            arrayOf(
+                DataPoint(0.0, 0.0),
+                DataPoint(1.0, 0.0),
+                DataPoint(2.0, 0.0),
+                DataPoint(3.0, 0.0),
+                DataPoint(4.0, 0.0)
+            )
         )
 
         graphEMGAmplitude.addSeries(seriesAmplitudeEMG)
         graphEMGAmplitude.titleTextSize = 25f
         graphEMGAmplitude.viewport.setMaxY(5.0)
         graphEMGAmplitude.viewport.setMinY(0.0)
-        graphEMGAmplitude.viewport.setMaxX(5.0)
+        graphEMGAmplitude.viewport.setMaxX(3.0)
         graphEMGAmplitude.viewport.isYAxisBoundsManual = true
         graphEMGAmplitude.viewport.isXAxisBoundsManual = true
         seriesAmplitudeEMG.spacing = 90
@@ -81,9 +83,6 @@ class EmgFragment : Fragment() {
                 100
             )
         }
-        vm.runReading()
-        binding.SeekTrigger.value = trigger.toFloat()
-        vm.setTrigger(trigger)
         return root
     }
 
@@ -91,50 +90,16 @@ class EmgFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.SeekTrigger.addOnChangeListener(object : Slider.OnChangeListener{
-            override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
-                vm.setTrigger(value.toDouble())
-            }
-
-        })
+        vm.runReading()
 
         vm.emgValue.observe(viewLifecycleOwner) {
-            seriesEMG.appendData(DataPoint(vm.time, it), true, 10000)
+            firstSeriesEMG.appendData(DataPoint(vm.time, it[0]), true, 10000)
+            secondSeriesEMG.appendData(DataPoint(vm.time, it[1]), true, 10000)
         }
 
-        /*vm.ampl.observe(viewLifecycleOwner){
-            seriesAmplitudeEMG
-                .resetData(arrayOf(DataPoint(1.0, it)))
-            seriesAmplitudeEMG.spacing = 90
-            if (it >= trigger) {
-                bCount1_1 = true
-            }
-            if (it < trigger) {
-                bCount1_1 = false
-                bCount1 = false
-            }
-            if (!bCount1 && bCount1_1) {
-                vm.plusEmg()
-                bCount1 = true
-            }
-
+        vm.ampl.observe(viewLifecycleOwner) {
+            seriesAmplitudeEMG.resetData(arrayOf(DataPoint(1.0, it[0]), DataPoint(2.0, it[1])))
         }
-
-        vm.sokr.observe(viewLifecycleOwner){
-            binding.tC1.setText(it.toString())
-        }
-
-        vm.trigger.observe(viewLifecycleOwner){
-            trigger = it
-            binding.SeekTrigger.value = it.toFloat()
-            binding.txtTrigger.text = "Значение: ${trigger.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
-        }
-
-
-        binding.NullKButton.setOnClickListener {
-            vm.minusEmg()
-        }*/
-
     }
 
     override fun onDestroyView() {

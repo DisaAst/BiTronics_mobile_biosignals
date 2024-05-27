@@ -22,6 +22,7 @@ import com.bitronics.bitronicsmobilebiosignals.databinding.FragmentControlBindin
 import com.bitronics.bitronicsmobilebiosignals.databinding.FragmentFindDevicesBinding
 import com.bitronics.bitronicsmobilebiosignals.presentation.featureFindDevices.DevicesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class ControlFragment : Fragment() {
@@ -54,34 +55,18 @@ class ControlFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val path = activity?.filesDir
+        val letDirectory = File(path, "Data")
+        letDirectory.mkdirs()
+        val file = File(letDirectory, "data.txt")
 
-        vm.value.observe(viewLifecycleOwner) { it ->
-            binding.txtStatus.text = it
+        vm.value.observe(viewLifecycleOwner){
+            file.appendText(it.toString() + "\n")
         }
 
         binding.btnDisconnect.setOnClickListener{
             vm.disconnect()
             view.findNavController().navigate(R.id.action_nav_control_device_to_nav_home)
-        }
-
-        binding.buttonBrain.setOnClickListener {
-            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_eeg)
-        }
-
-        binding.buttonECG.setOnClickListener {
-            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_ecg)
-        }
-
-        binding.buttonPulse.setOnClickListener {
-            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_ppg)
-        }
-
-        binding.buttonKGR.setOnClickListener {
-            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_gsr)
-        }
-
-        binding.buttonMuscle.setOnClickListener {
-            view.findNavController().navigate(R.id.action_nav_control_device_to_nav_emg)
         }
     }
 

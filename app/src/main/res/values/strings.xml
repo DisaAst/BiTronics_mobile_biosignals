@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BiTronics mobile biosignals</string>
+    <string name="app_name">Android biosignals</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">BiTronics mobile biosignals</string>
@@ -11,7 +11,7 @@
     <string name="gpsNotifyMsg">Current mobile phone scanning Bluetooth needs to open the positioning function</string>
     <string name="setting">Go to settings</string>
     <string name="cancel">Cancel</string>
-    <string name="aboutApplication">BiTronics mobile biosignals - приложение, предназначенное для визуализации биоэлектрических сигналов на платформе Android</string>
+    <string name="aboutApplication">Android biosignals - приложение, предназначенное для визуализации биоэлектрических сигналов на платформе Android</string>
     <string name="stringHome">Домашняя страница</string>
 
     <string name="eegMenu">Активность мозга</string>
@@ -31,9 +31,9 @@
     <string name="connected">Подключено</string>
     <string name="device">Устройство</string>
     <string name="our_contacts">Наши контакты:</string>
-    <string name="string_email">support@bitronicslab.com</string>
+    <string name="string_email">densof161922@gmail.com</string>
     <string name="fondHelpInnovation">Разработано при поддержке</string>
-    <string name="fondHelpInnovation2">Фонда содействия инновациям</string>
+    <string name="fondHelpInnovation2">Фонда содействия инновациям и компании BiTronics Lab</string>
     <string name="nav_ecg">Актичность сердца</string>
     <string name="nav_pulse">Пульс</string>
     <string name="nav_gsr">Сопротивление кожи</string>

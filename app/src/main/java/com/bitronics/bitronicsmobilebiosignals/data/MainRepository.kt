@@ -40,23 +40,14 @@ import java.io.IOException
 import javax.inject.Inject
 
 
-class MainRepository @Inject constructor(val context: Context, val parser: Parser) {
+class MainRepository @Inject constructor(val context: Context) {
 
     val bluetoothAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     var connectThread = ConnectThread()
     var connectedThread: ConnectedThread? = null
-
-    var dataSensor = doubleArrayOf(0.0, 0.0, 0.0, 0.0, 0.0)
-
     var sensorType = 0
-
     var statusConnected = false
-
     var connected = false
-
-    fun interface ScanCallback {
-        fun scanCallback(arr: ArrayList<BluetoothDevice>)
-    }
 
     @SuppressLint("MissingPermission")
     fun startScan(): Flow<ArrayList<BluetoothDevice>> = callbackFlow<ArrayList<BluetoothDevice>> {
@@ -102,11 +93,11 @@ class MainRepository @Inject constructor(val context: Context, val parser: Parse
         }
     }.flowOn(Dispatchers.IO)
 
-    fun runReading() = channelFlow<ByteArray>{
+    @OptIn(ExperimentalUnsignedTypes::class)
+    fun runReading() = flow<ByteArray>{
         if(connectedThread !== null){
             connectedThread?.run()?.collect {
-                Log.d("Значение: ", it[0].toString())
-                trySendBlocking(it)
+                emit(it)
             }
         }
     }.flowOn(Dispatchers.IO)
@@ -119,13 +110,6 @@ class MainRepository @Inject constructor(val context: Context, val parser: Parse
         }
     }
 
-    fun fetchSensorType() = sensorType
-
-
-    fun fetchDataSensor() = dataSensor
-
-
     fun isConnected() = statusConnected
-
 
 }

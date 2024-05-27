@@ -15,24 +15,29 @@ class EcgViewModel @Inject constructor(
     val bioSignalProcessor: BioSignalProcessor
 ) : ViewModel() {
 
+    var ecgValue = MutableLiveData<Double>()
     var pulse = MutableLiveData<Double>()
     var ampl = MutableLiveData<Double>()
+    var time = 0.0
+    var ecgSeries = DoubleArray(99)
+    var counter = 0
 
-    fun fetchData() = mainRepository.fetchDataSensor()
-
-    fun fetchModuleType() = mainRepository.fetchSensorType()
-
-    fun isConnected() = mainRepository.isConnected()
-
-    fun fetchPulse(array: DoubleArray) {
+    @OptIn(ExperimentalUnsignedTypes::class)
+    fun runReading() {
         viewModelScope.launch {
-            pulse.value = bioSignalProcessor.getPulseWithECG(array).toDouble()
-        }
-    }
-
-    fun fetchAmpl(arr: DoubleArray) {
-        viewModelScope.launch {
-            ampl.value = bioSignalProcessor.getAmpl(arr)
+            mainRepository.runReading().collect {
+                time += 0.03
+                time = time
+                ecgValue.value = (it[0].toUByte().toDouble() / 255.0) * 5.0
+                if(counter == 99){
+                    //pulse.value = ppg.getPulse(ppgSeries, 0.33)
+                    ampl.value = ecgSeries.max() - ecgSeries.min()
+                    pulse.value = bioSignalProcessor.getPulseWithECG(ecgSeries)
+                    counter = 0
+                }
+                ecgSeries[counter] = (it[0].toUByte().toDouble() / 255.0) * 5.0
+                counter++
+            }
         }
     }
 }

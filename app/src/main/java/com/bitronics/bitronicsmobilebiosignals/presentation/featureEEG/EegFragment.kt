@@ -36,15 +36,8 @@ class EegFragment : Fragment() {
 
     lateinit var seriesEEG: LineGraphSeries<DataPoint>
     lateinit var seriesEEGSpectr: BarGraphSeries<DataPoint>
-
-    var time: Double = 0.0
-
-    var timer_EEG = Timer()
-
     val vm: EegViewModel by viewModels()
     var player: MediaPlayer? = null
-
-    var amplAlpha = 0.0
     var m = 0
     var trigger = 1.5
 
@@ -61,7 +54,7 @@ class EegFragment : Fragment() {
         seriesEEG.color = Color.rgb(161, 99, 51)
         graph_EEG.addSeries(seriesEEG)
         graph_EEG.titleTextSize = 25f
-        graph_EEG.viewport.setMaxY(3.0)
+        graph_EEG.viewport.setMaxY(5.0)
         graph_EEG.viewport.setMinY(0.0)
         graph_EEG.viewport.setMaxX(10.0)
         graph_EEG.viewport.isYAxisBoundsManual = true
@@ -79,7 +72,8 @@ class EegFragment : Fragment() {
                 DataPoint(12.0, 0.0), DataPoint(13.0, 0.0), DataPoint(14.0, 0.0),
                 DataPoint(15.0, 0.0), DataPoint(16.0, 0.0), DataPoint(17.0, 0.0),
                 DataPoint(18.0, 0.0), DataPoint(19.0, 0.0), DataPoint(20.0, 0.0),
-            ))
+            )
+        )
         graph_Spectr.addSeries(seriesEEGSpectr)
         graph_Spectr.viewport.setMaxY(30.0)
         graph_Spectr.viewport.setMinY(0.0)
@@ -94,7 +88,20 @@ class EegFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        timer_EEG.schedule(ShowData(), 0, 10)
+        vm.runReading()
+
+        vm.eegValue.observe(viewLifecycleOwner) {
+            seriesEEG.appendData(DataPoint(vm.time, it), true, 10000)
+
+        }
+
+        vm.alpha.observe(viewLifecycleOwner) {
+            if (it >= (vm.trigger.value ?: 0.0)) {
+                playSound()
+            } else {
+                stopSound()
+            }
+        }
 
         vm.spectr.observe(viewLifecycleOwner) {
             seriesEEGSpectr
@@ -109,38 +116,61 @@ class EegFragment : Fragment() {
                         DataPoint(18.0, it[18]), DataPoint(19.0, it[19]), DataPoint(20.0, it[20]),
                     )
                 )
-            amplAlpha = it[8] + it[9] + it[10] + it[11]
         }
 
-        binding.SeekEEG.addOnChangeListener(object : Slider.OnChangeListener{
+        binding.SeekEEG.addOnChangeListener(object : Slider.OnChangeListener {
             override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
                 vm.setTrigger(value.toDouble())
             }
 
         })
 
+        vm.melody.observe(viewLifecycleOwner) { melody ->
+            when (melody) {
+                1 -> {
+                    m = 1
+                    playSound()
+                }
 
-        vm.trigger.observe(viewLifecycleOwner){
+                2 -> {
+                    m = 2
+                    playSound()
+                }
+
+                3 -> {
+                    m = 3
+                    playSound()
+                }
+
+                else -> stopSound()
+            }
+        }
+
+        vm.trigger.observe(viewLifecycleOwner) {
             trigger = it
             binding.SeekEEG.value = it.toFloat()
-            binding.txtTrigEEG.text = "Значение: ${trigger.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+            binding.txtTrigEEG.text =
+                "Значение: ${trigger.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
         }
 
         binding.music.setOnCheckedChangeListener(RadioGroup.OnCheckedChangeListener { arg0, id ->
             when (id) {
                 R.id.Rain -> {
-                    m = 1
+                    vm.melody.value = 1
                     stopSound()
                 }
+
                 R.id.BohemianRapsody -> {
-                    m = 2
+                    vm.melody.value = 2
                     stopSound()
                 }
+
                 R.id.Lunnaya_Sonata -> {
                     stopSound()
-                    m = 3
+                    vm.melody.value = 3
                     stopSound()
                 }
+
                 else -> {}
             }
         })
@@ -156,85 +186,21 @@ class EegFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        timer_EEG.cancel()
+        stopSound()
         _binding = null
     }
 
-    inner class ShowData() : TimerTask() {
-
-        var count = 0
-        var arrForProc = DoubleArray(1024)
-
-        var n = 1024
-        override fun run() {
-
-            activity?.runOnUiThread {
-
-                if (vm.isConnected() && vm.fetchModuleType() == 5) {
-                    if (count == n) {
-                        vm.fetchSpectr(arrForProc)
-                        count = 0
-                    }
-                    val array: DoubleArray = vm.fetchData()
-                    seriesEEG.appendData(DataPoint(time, array[0]), true, 10000)
-                    if (count == n) {
-                        vm.fetchSpectr(arrForProc)
-                        count = 0
-                    }
-                    if(amplAlpha > trigger) playSound()
-                    else stopSound()
-                    arrForProc[count] = array[0]
-                    count += 1
-                    time += 0.002
-                    seriesEEG.appendData(DataPoint(time, array[1]), true, 10000)
-                    if (count == n) {
-                        vm.fetchSpectr(arrForProc)
-                        count = 0
-                    }
-                    arrForProc[count] = array[1]
-                    count += 1
-                    time += 0.002
-                    seriesEEG.appendData(DataPoint(time, array[2]), true, 10000)
-                    if (count == n) {
-                        vm.fetchSpectr(arrForProc)
-                        count = 0
-                    }
-                    arrForProc[count] = array[2]
-                    count += 1
-                    time += 0.002
-                    seriesEEG.appendData(DataPoint(time, array[3]), true, 10000)
-                    if (count == n) {
-                        vm.fetchSpectr(arrForProc)
-                        count = 0
-                    }
-                    arrForProc[count] = array[3]
-                    count += 1
-                    time += 0.002
-                    seriesEEG.appendData(DataPoint(time, array[4]), true, 10000)
-                    if (count == n) {
-                        vm.fetchSpectr(arrForProc)
-                        count = 0
-                    }
-                    arrForProc[count] = array[4]
-                    count += 1
-                    time += 0.002
-                }
-                else stopSound()
-            }
-        }
-    }
-
     fun playSound() {
-        if (m != 0) {
+        if (vm.melody.value != 0) {
             if (player == null) {
                 player = MediaPlayer()
-                if (m == 1) player = MediaPlayer.create(
+                if (vm.melody.value == 1) player = MediaPlayer.create(
                     activity,
                     R.raw.rain1
-                ) else if (m == 2) player = MediaPlayer.create(
+                ) else if (vm.melody.value == 2) player = MediaPlayer.create(
                     activity,
                     R.raw.queen
-                ) else if (m == 3) player =
+                ) else if (vm.melody.value == 3) player =
                     MediaPlayer.create(activity, R.raw.betkhoven)
                 player?.setOnCompletionListener(OnCompletionListener { stopSound() })
             }
@@ -249,19 +215,3 @@ class EegFragment : Fragment() {
         }
     }
 }
-/*
-if (vm.isConnected() && vm.fetchModuleType() == 5) {
-    var array: DoubleArray
-    array = vm.fetchData()
-    seriesEEG.appendData(DataPoint(time, array[0]), true, 10000)
-    time+= 0.002
-    seriesEEG.appendData(DataPoint(time, array[1]), true, 10000)
-    time+= 0.002
-    seriesEEG.appendData(DataPoint(time, array[2]), true, 10000)
-    time+= 0.002
-    seriesEEG.appendData(DataPoint(time, array[3]), true, 10000)
-    time+= 0.002
-    seriesEEG.appendData(DataPoint(time, array[4]), true, 10000)
-    time+= 0.002
-}
-*/

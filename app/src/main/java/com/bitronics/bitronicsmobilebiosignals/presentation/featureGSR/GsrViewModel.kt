@@ -7,6 +7,7 @@ import com.bitronics.bitronicsmobilebiosignals.data.MainRepository
 import com.bitronics.bitronicsmobilebiosignals.data.biosignals.BioSignalProcessor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,28 +16,41 @@ class GsrViewModel @Inject constructor(
     val bioSignalProcessor: BioSignalProcessor
 ) : ViewModel() {
 
-    var timeReaction = MutableLiveData<Double>()
     var amplitude = MutableLiveData<Double>()
-    var lastValue = 0.0
+    var time = 0.0
+    var gsr_value = MutableLiveData<Double>(0.0)
+    var data = DoubleArray(33)
+    var count = 0
+    var timeReaction = MutableLiveData(0.0)
+    var treshold = 0.0
+    var runCase = false
 
-    fun setTimeReaction(value: Double){
-        if(value!=0.01){
-             timeReaction.value = value
-            lastValue = value
-        }
-        else{
-            timeReaction.value = lastValue
-        }
+    fun startCase() {
+        treshold = gsr_value.value ?: (0.0 + 0.01)
+        runCase = true
     }
-    fun fetchData() = mainRepository.fetchDataSensor()
 
-    fun fetchModuleType() = mainRepository.fetchSensorType()
-
-    fun isConnected() = mainRepository.isConnected()
-
-    fun fetchAmplitude(array: DoubleArray){
+    @OptIn(ExperimentalUnsignedTypes::class)
+    fun runReading() {
         viewModelScope.launch {
-            amplitude.value = bioSignalProcessor.getAmpl(array)
+            mainRepository.runReading().collect {
+                time += 0.03
+                var value = (it[0].toUByte().toDouble() / 255.0) * 5.0
+                gsr_value.value = value
+                if (count == 33) {
+                    amplitude.value = (data.max() - data.min())
+                    count = 0
+                }
+                if(runCase && (value >= treshold + 0.025 || value <= treshold - 0.025)){
+                    timeReaction.value = timeReaction.value?.plus(0.03)?.toBigDecimal()?.setScale(1, RoundingMode.UP)?.toDouble()
+                }
+                else {
+                    timeReaction.value = 0.0
+                }
+                data[count] = value
+                count++
+            }
         }
     }
+
 }

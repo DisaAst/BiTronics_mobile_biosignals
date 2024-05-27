@@ -21,16 +21,9 @@ class PpgFragment : Fragment() {
 
     private var _binding: FragmentPpgBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     lateinit var seriesPPG: LineGraphSeries<DataPoint>
-    lateinit var seriesPulse: LineGraphSeries<DataPoint>
-
-    var time: Double = 0.0
-
-    var timer_PPG = Timer()
 
     val vm: PpgViewModel by viewModels()
 
@@ -48,7 +41,7 @@ class PpgFragment : Fragment() {
         graph_PPG.addSeries(seriesPPG)
         seriesPPG.color = Color.BLUE
         graph_PPG.titleTextSize = 25f
-        graph_PPG.viewport.setMaxY(3.0)
+        graph_PPG.viewport.setMaxY(5.0)
         graph_PPG.viewport.setMinY(0.0)
         graph_PPG.viewport.setMaxX(10.0)
         graph_PPG.viewport.isYAxisBoundsManual = true
@@ -62,75 +55,36 @@ class PpgFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        timer_PPG.schedule(ShowData(), 0, 10)
+        vm.runReading()
 
+        vm.ppgValue.observe(viewLifecycleOwner) {
+            seriesPPG.appendData(DataPoint(vm.time, it), true, 10000)
+        }
 
         vm.pulse.observe(viewLifecycleOwner) {
-            if(it < 50) {
+            if (it < 50 || it.isNaN()) {
                 binding.textPulse.text = "Пульс: -"
                 binding.textRR.text = "RR-интервал: -"
-            }
-            else {
+            } else {
                 binding.textPulse.text =
                     "Пульс: ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
-                binding.textRR.text = "RR-интервал: ${(60 / it).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+                binding.textRR.text = "RR-интервал: ${
+                    (60 / it).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
+                }"
             }
         }
 
-        vm.ampl.observe(viewLifecycleOwner){
-            binding.textEBC.text = "EBC (расчетный цикл дыхания): ${it.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()}"
+        vm.ampl.observe(viewLifecycleOwner) {
+            binding.textEBC.text = "EBC (расчетный цикл дыхания): ${
+                it.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
+            }"
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        timer_PPG.cancel()
         _binding = null
     }
 
-    inner class ShowData : TimerTask() {
-
-        var count = 0
-        var arrForProc = DoubleArray(3000)
-        var countFilter = 0
-        var sum = 0.0
-        override fun run() {
-
-            activity?.runOnUiThread {
-
-                if (vm.isConnected() && vm.fetchModuleType() == 2) {
-                    if (count == 3000) {
-                        vm.fetchPulse(arrForProc)
-                        vm.fetchAmpl(arrForProc)
-                        count = 0
-                    }
-                    if(countFilter == 20){
-                        sum /= 20
-                        seriesPPG.appendData(DataPoint(time, sum), true, 10000)
-                        sum = 0.0
-                        countFilter = 0
-                    }
-                    val array: DoubleArray = vm.fetchData()
-                    sum += array[0] + array[1] + array[2] + array[3] + array[4]
-                    countFilter += 5
-                    arrForProc[count] = array[0]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[1]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[2]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[3]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[4]
-                    count += 1
-                    time += 0.002
-                }
-            }
-        }
-    }
 }
 

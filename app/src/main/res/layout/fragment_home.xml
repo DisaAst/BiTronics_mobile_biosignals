@@ -8,19 +8,10 @@
     android:background="@drawable/background_home"
     >
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="6dp"
-        app:srcCompat="@drawable/bitronicslab_logo_white" />
-
     <TextView
         android:id="@+id/textAboutApplication"
         android:layout_width="270dp"
         android:layout_height="90dp"
-        android:layout_below="@+id/logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:gravity="center|top"
@@ -32,7 +23,9 @@
     <Button
         android:id="@+id/buttonOnBluetooth"
         android:layout_width="300dp"
+        android:layout_below="@+id/textAboutApplication"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:layout_centerInParent="true"
         android:text="@string/onBluetooth"
         android:textColor="#388AFB"
@@ -102,5 +95,16 @@
         android:layout_below="@+id/textView6"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:id="@+id/logo_fond"
         app:srcCompat="@drawable/logo_fond" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="6dp"
+        android:layout_below="@+id/logo_fond"
+        app:srcCompat="@drawable/bitronicslab_logo_white" />
+
 </RelativeLayout>

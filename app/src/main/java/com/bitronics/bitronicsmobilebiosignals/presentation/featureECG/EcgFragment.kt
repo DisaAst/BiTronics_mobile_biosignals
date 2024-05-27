@@ -21,14 +21,9 @@ class EcgFragment : Fragment() {
 
     private var _binding: FragmentEcgBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     lateinit var seriesECG: LineGraphSeries<DataPoint>
-    var time: Double = 0.0
-
-    var timer_ECG = Timer()
 
     val vm: EcgViewModel by viewModels()
 
@@ -60,10 +55,15 @@ class EcgFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        timer_ECG.schedule(ShowData(), 0, 10)
+
+        vm.runReading()
+
+        vm.ecgValue.observe(viewLifecycleOwner) {
+            seriesECG.appendData(DataPoint(vm.time, it), true, 10000)
+        }
 
         vm.pulse.observe(viewLifecycleOwner) {
-            if(it < 50) {
+            if(it < 50 || it.isNaN()) {
                 binding.textPulse.text = "Пульс: -"
                 binding.textRR.text = "RR-интервал: -"
             }
@@ -74,6 +74,7 @@ class EcgFragment : Fragment() {
             }
         }
 
+
         vm.ampl.observe(viewLifecycleOwner){
             binding.textEBC.text = "EBC (расчетный цикл дыхания): ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
         }
@@ -82,8 +83,6 @@ class EcgFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        timer_ECG.cancel()
-
     }
 
     override fun onStop() {
@@ -92,51 +91,5 @@ class EcgFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-    }
-
-    inner class ShowData() : TimerTask() {
-
-        var count = 0
-        var arrForProc = DoubleArray(3000)
-
-        var countFilter = 0
-        var sum = 0.0
-        override fun run() {
-
-            activity?.runOnUiThread {
-
-                if (vm.isConnected() && vm.fetchModuleType() == 1) {
-                    if (count == 3000) {
-                        vm.fetchPulse(arrForProc)
-                        vm.fetchAmpl(arrForProc)
-                        count = 0
-                    }
-                    if(countFilter == 20){
-                        sum /= 20
-                        seriesECG.appendData(DataPoint(time, sum), true, 10000)
-                        sum = 0.0
-                        countFilter = 0
-                    }
-                    val array: DoubleArray = vm.fetchData()
-                    sum += array[0] + array[1] + array[2] + array[3] + array[4]
-                    countFilter += 5
-                    arrForProc[count] = array[0]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[1]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[2]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[3]
-                    count += 1
-                    time += 0.002
-                    arrForProc[count] = array[4]
-                    count += 1
-                    time += 0.002
-                }
-            }
-        }
     }
 }
