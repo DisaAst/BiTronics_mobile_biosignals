@@ -79,5 +79,7 @@
     <string name="GSRActivity">Сопротивление кожи</string>
     <string name="PulseActivity">Пульс</string>
     <string name="Kalibrate">Калибровка</string>
+    <string name="StateText">Физиологическое состояние:</string>
+    <string name="StressText">Стресс:</string>
 
 </resources>

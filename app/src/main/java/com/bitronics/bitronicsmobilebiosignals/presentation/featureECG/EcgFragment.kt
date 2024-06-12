@@ -42,7 +42,7 @@ class EcgFragment : Fragment() {
         graphECG.addSeries(seriesECG)
         seriesECG.color = Color.RED
         graphECG.titleTextSize = 25f
-        graphECG.viewport.setMaxY(3.0)
+        graphECG.viewport.setMaxY(5.0)
         graphECG.viewport.setMinY(0.0)
         graphECG.viewport.setMaxX(10.0)
         graphECG.viewport.isYAxisBoundsManual = true
@@ -62,15 +62,24 @@ class EcgFragment : Fragment() {
             seriesECG.appendData(DataPoint(vm.time, it), true, 10000)
         }
 
+        vm.stress.observe(viewLifecycleOwner) {
+            if(it.isNaN()) binding.stressText.text = "Стресс: не определено"
+            else binding.stressText.text = "Стресс: ${it}"
+        }
+
         vm.pulse.observe(viewLifecycleOwner) {
             if(it < 50 || it.isNaN()) {
                 binding.textPulse.text = "Пульс: -"
                 binding.textRR.text = "RR-интервал: -"
+                binding.textState.text = "Физиологическое состояние: не определено"
             }
             else {
                 binding.textPulse.text =
                     "Пульс: ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
                 binding.textRR.text = "RR-интервал: ${(60 / it).toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+                if(it >= 50 && it < 80) binding.textState.text = "Физиологическое состояние: расслаблен"
+                if(it >= 80 && it < 120) binding.textState.text = "Физиологическое состояние: активная деятельность"
+                if(it > 120) binding.textState.text = "Физиологическое состояние: напряжён"
             }
         }
 

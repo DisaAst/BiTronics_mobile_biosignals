@@ -8,6 +8,7 @@ import com.bitronics.bitronicsmobilebiosignals.data.biosignals.BioSignalProcesso
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 class EcgViewModel @Inject constructor(
@@ -21,6 +22,7 @@ class EcgViewModel @Inject constructor(
     var time = 0.0
     var ecgSeries = DoubleArray(99)
     var counter = 0
+    var stress = MutableLiveData<Double>()
 
     @OptIn(ExperimentalUnsignedTypes::class)
     fun runReading() {
@@ -30,9 +32,9 @@ class EcgViewModel @Inject constructor(
                 time = time
                 ecgValue.value = (it[0].toUByte().toDouble() / 255.0) * 5.0
                 if(counter == 99){
-                    //pulse.value = ppg.getPulse(ppgSeries, 0.33)
                     ampl.value = ecgSeries.max() - ecgSeries.min()
-                    pulse.value = bioSignalProcessor.getPulseWithECG(ecgSeries)
+                    pulse.value = bioSignalProcessor.getPulseWithECG(ecgSeries.toList().windowed(5, 5){ it.average() }.toDoubleArray())
+                    stress.value = bioSignalProcessor.calculateStressIndex(bioSignalProcessor.getRRINtervals(ecgSeries.toList().windowed(5, 5){ it.average() }.toDoubleArray()).toList())
                     counter = 0
                 }
                 ecgSeries[counter] = (it[0].toUByte().toDouble() / 255.0) * 5.0

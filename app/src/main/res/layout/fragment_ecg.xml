@@ -64,6 +64,30 @@
                 android:textColor="#99000000"
                 android:textSize="16sp" />
 
+            <TextView
+                android:id="@+id/textState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textEBC"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/StateText"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/stressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textState"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/StressText"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="#99000000"
+                android:textSize="16sp" />
+
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="wrap_content"
