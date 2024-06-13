@@ -24,7 +24,7 @@ class BioSignalProcessor {
     val eeg: EEG = EEG()
 
     suspend fun getAmpl(array: DoubleArray): Double = withContext(Dispatchers.IO) {
-        return@withContext emg.getAmpl(array)
+        return@withContext array.max() - array.min()
     }
 
     suspend fun getPulseWithPPG(arrData: DoubleArray): Double = withContext(Dispatchers.IO) {

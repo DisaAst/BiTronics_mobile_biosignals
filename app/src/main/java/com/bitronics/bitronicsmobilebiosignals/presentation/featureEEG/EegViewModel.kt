@@ -10,35 +10,40 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EegViewModel @Inject constructor(val mainRepository: MainRepository, val bioSignalProcessor: BioSignalProcessor) : ViewModel() {
+class EegViewModel @Inject constructor(
+    val mainRepository: MainRepository,
+    val bioSignalProcessor: BioSignalProcessor
+) : ViewModel() {
 
     var spectr = MutableLiveData<DoubleArray>()
     var eegValue = MutableLiveData<Double>()
     var trigger = MutableLiveData<Double>(10.0)
-    var seriesEEG = DoubleArray(32)
+    var seriesEEG = DoubleArray(64)
     var counter = 0
     var time = 0.0
     var alpha = MutableLiveData<Double>(0.0)
     var melody = MutableLiveData<Int>()
 
-    fun runReading(){
+    fun runReading() {
         viewModelScope.launch {
             mainRepository.runReading().collect {
                 var value = (it[0].toUByte().toDouble() / 255.0) * 5.0
                 eegValue.value = value
-                if(counter == 32){
+                if (counter == 64) {
                     var newSpectr = bioSignalProcessor.fftTransform(seriesEEG)
                     spectr.value = newSpectr
-                    alpha.value = newSpectr[8] + newSpectr[9] + newSpectr[10] + newSpectr[11]
+                    alpha.value =
+                        newSpectr[7] + newSpectr[8] + newSpectr[9] + newSpectr[10] + newSpectr[11] + newSpectr[11] + newSpectr[12] + newSpectr[13] + newSpectr[14]
                     counter = 0
                 }
                 seriesEEG[counter] = value
                 time += 0.03
-                counter ++
+                counter++
             }
         }
     }
-    fun setTrigger(value: Double){
+
+    fun setTrigger(value: Double) {
         trigger.value = value
     }
 

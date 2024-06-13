@@ -75,7 +75,7 @@ class EegFragment : Fragment() {
             )
         )
         graph_Spectr.addSeries(seriesEEGSpectr)
-        graph_Spectr.viewport.setMaxY(30.0)
+        graph_Spectr.viewport.setMaxY(10.0)
         graph_Spectr.viewport.setMinY(0.0)
         graph_Spectr.viewport.setMaxX(28.0)
         graph_Spectr.viewport.isYAxisBoundsManual = true

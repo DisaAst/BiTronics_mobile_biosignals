@@ -97,6 +97,29 @@ class EmgFragment : Fragment() {
             secondSeriesEMG.appendData(DataPoint(vm.time, it[1]), true, 10000)
         }
 
+        vm.contractions1.observe(viewLifecycleOwner){
+            binding.tC1.setText(it.toString())
+        }
+
+        vm.contractions2.observe(viewLifecycleOwner){
+            binding.tC2.setText(it.toString())
+        }
+
+        vm.trigger.observe(viewLifecycleOwner){
+            binding.SeekTrigger.value = it.toFloat()
+            binding.txtTrigger.text = "Значение: ${it.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()}"
+        }
+
+        binding.SeekTrigger.addOnChangeListener(object : Slider.OnChangeListener{
+            override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
+                vm.setTrigger(value.toDouble())
+            }
+        })
+
+        binding.NullKButton.setOnClickListener {
+            vm.resetContractionsCount()
+        }
+
         vm.ampl.observe(viewLifecycleOwner) {
             seriesAmplitudeEMG.resetData(arrayOf(DataPoint(1.0, it[0]), DataPoint(2.0, it[1])))
         }
